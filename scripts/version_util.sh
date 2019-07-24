@@ -78,8 +78,14 @@ function ensure_pristine_workspace() {
   git_status=$(git status -s)
   original_branch=$(git symbolic-ref --short HEAD)
   [ -z "$git_status" ] || { echo -e "Changes found:\n$git_status\n"; die "Workspace must be free of changes. See above and please correct."; }
-  unpushed_commits=$(git log --branches --not --remotes)
-  [ -z "$unpushed_commits" ] || { echo -e "Unpushed commits found (use 'git log --branches --not --remotes'):\n$unpushed_commits\n"; die "Workspace must be free of changes. See above and please correct."; }
+  if [ -z ${1:-} ]; then
+    unpushed_commits=$(git log --branches --not --remotes)
+    [ -z "$unpushed_commits" ] || { echo -e "Unpushed commits found (use 'git log --branches --not --remotes'):\n$unpushed_commits\n"; die "Workspace must be free of changes. See above and please correct."; }
+  fi
+}
+
+function ensure_pristine_workspace_light() {
+  ensure_pristine_workspace "true"
 }
 
 function ensure_single_branch() {
@@ -327,6 +333,7 @@ elif [[ $ARG == 'status' ]]; then
   ensure_pristine_workspace
   status $@
 elif [[ $ARG == 'empty_commit' ]]; then
+  ensure_pristine_workspace_light
   empty_commit $@
 else
   die "method '$ARG' not found"
