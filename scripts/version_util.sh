@@ -328,7 +328,6 @@ elif [[ $ARG == 'status' ]]; then
   ensure_pristine_workspace
   status $@
 elif [[ $ARG == 'empty_commit' ]]; then
-  ensure_pristine_workspace
   empty_commit $@
 else
   die "method '$ARG' not found"
