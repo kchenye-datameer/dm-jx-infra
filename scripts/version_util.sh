@@ -173,13 +173,18 @@ function create_branch() {
 
   # check for custom commit
   checkout_branch $sourceBranch
-  echo "Listing last 10 commits."
-  git --no-pager log --oneline -n 10
   branchPoint=$(git rev-parse --short HEAD)
-  read -p "Commit to branch from [$branchPoint]: " branchPointInput
-  if [[ "$branchPointInput" != "$branchPoint" ]]; then
-    echo "Checking out from commit '$branchPointInput'"
-    git checkout -b $targetBranch $branchPointInput
+  if [[ "$targetBranch" =~ release* ]]; then
+    echo "Listing last 10 commits."
+    git --no-pager log --oneline -n 10
+    read -p "Commit to branch from [$branchPoint]: " branchPointInput
+    if [[ "$branchPointInput" != "$branchPoint" ]]; then
+      echo "Checking out from commit '$branchPointInput'"
+      git checkout -b $targetBranch $branchPointInput
+    else
+      echo "Checking out from HEAD"
+      git checkout -b $targetBranch
+    fi
   else
     echo "Checking out from HEAD"
     git checkout -b $targetBranch
