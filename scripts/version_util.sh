@@ -251,7 +251,13 @@ function status() {
 function merge_hotfix() {
   local masterBr workingBr
   masterBr=$(ensure_single_branch "$GF_MASTER" true)
+  developBr=$(ensure_single_branch "$GF_DEVELOP" true)
   workingBr=$(ensure_single_branch "$GF_HOTFIX_PATTERN" true)
+  releaseBr=$(search_for_branch "$GF_RELEASE_PATTERN" true)
+  if [ -n "$releaseBr" ]; then
+    merge_source_into_target $workingBr $releaseBr
+  fi
+  merge_source_into_target $workingBr $developBr
   merge_source_into_target $workingBr $masterBr
   delete_branch $workingBr
   tag_branch "$GF_MASTER"
