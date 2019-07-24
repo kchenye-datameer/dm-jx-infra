@@ -171,14 +171,13 @@ function create_branch() {
   git --no-pager log --oneline -n 10
   branchPoint=$(git rev-parse --short HEAD)
   read -p "Commit to branch from [$branchPoint]: " branchPointInput
-  branchPoint=${branchPointInput:-$branchPoint}
   if [[ "$branchPointInput" != "$branchPoint" ]]; then
-    echo "Checking out commit '$branchPointInput'"
-    git checkout $branchPointInput
+    echo "Checking out from commit '$branchPointInput'"
+    git checkout -b $targetBranch $branchPointInput
+  else
+    echo "Checking out from HEAD"
+    git checkout -b $targetBranch
   fi
-
-  # create branch
-  git checkout -b $targetBranch
   git push --set-upstream origin $targetBranch
 }
 
@@ -328,7 +327,6 @@ elif [[ $ARG == 'status' ]]; then
   ensure_pristine_workspace
   status $@
 elif [[ $ARG == 'empty_commit' ]]; then
-  ensure_pristine_workspace
   empty_commit $@
 else
   die "method '$ARG' not found"
