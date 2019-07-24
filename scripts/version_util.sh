@@ -171,7 +171,6 @@ function create_branch() {
   git --no-pager log --oneline -n 10
   branchPoint=$(git rev-parse --short HEAD)
   read -p "Commit to branch from [$branchPoint]: " branchPointInput
-  branchPoint=${branchPointInput:-$branchPoint}
   if [[ "$branchPointInput" != "$branchPoint" ]]; then
     echo "Checking out from commit '$branchPointInput'"
     git checkout -b $targetBranch $branchPointInput
