@@ -173,12 +173,12 @@ function create_branch() {
   read -p "Commit to branch from [$branchPoint]: " branchPointInput
   branchPoint=${branchPointInput:-$branchPoint}
   if [[ "$branchPointInput" != "$branchPoint" ]]; then
-    echo "Checking out commit '$branchPointInput'"
-    git checkout $branchPointInput
+    echo "Checking out from commit '$branchPointInput'"
+    git checkout -b $targetBranch $branchPointInput
+  else
+    echo "Checking out from HEAD"
+    git checkout -b $targetBranch
   fi
-
-  # create branch
-  git checkout -b $targetBranch
   git push --set-upstream origin $targetBranch
 }
 
