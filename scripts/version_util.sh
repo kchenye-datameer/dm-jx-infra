@@ -193,7 +193,7 @@ function merge_source_into_target() {
   confirm "Will merge release '$source' into '$target'"
   checkout_branch $source
   checkout_branch $target
-  git merge $source -m "Merge branch '$source'"
+  git merge --no-ff $source -m "Merge branch '$source'"
   git push origin $target
 }
 
